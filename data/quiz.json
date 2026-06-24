@@ -7,7 +7,7 @@
       "Folosirea unei parole unice și păstrarea ei confidențială.",
       "Comunicarea parolei colegului din schimbul următor."
     ],
-    "corect": 2
+    "corect": 1
   },
   {
     "id": 2,
@@ -17,7 +17,7 @@
       "Se formatează direct pe stația SCADA.",
       "Nu se conectează și se predă conform procedurii de securitate."
     ],
-    "corect": 3
+    "corect": 2
   },
   {
     "id": 3,
@@ -27,7 +27,7 @@
       "Verifici solicitarea printr-un canal separat și raportezi mesajul suspect.",
       "Redirecționezi mesajul tuturor colegilor."
     ],
-    "corect": 2
+    "corect": 1
   },
   {
     "id": 4,
@@ -37,7 +37,7 @@
       "Pentru a primi automat o parolă nouă.",
       "Pentru a demonstra că adresa de e-mail funcționează."
     ],
-    "corect": 1
+    "corect": 0
   },
   {
     "id": 5,
@@ -47,6 +47,6 @@
       "Învățarea exclusivă a programării echipamentelor SCADA.",
       "Dezvoltarea capacității de a identifica riscurile și de a reacționa corect."
     ],
-    "corect": 3
+    "corect": 2
   }
 ]
