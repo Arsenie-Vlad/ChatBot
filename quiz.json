@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "intrebare": "Care este practica recomandată pentru un cont SCADA?",
+    "optiuni": [
+      "Folosirea aceleiași parole ca la e-mail, pentru a fi ușor de reținut.",
+      "Folosirea unei parole unice și păstrarea ei confidențială.",
+      "Comunicarea parolei colegului din schimbul următor."
+    ],
+    "corect": 2
+  },
+  {
+    "id": 2,
+    "intrebare": "Ce trebuie făcut cu un stick USB găsit în apropierea unui echipament OT?",
+    "optiuni": [
+      "Se conectează pentru a identifica proprietarul.",
+      "Se formatează direct pe stația SCADA.",
+      "Nu se conectează și se predă conform procedurii de securitate."
+    ],
+    "corect": 3
+  },
+  {
+    "id": 3,
+    "intrebare": "Primești un e-mail urgent, aparent de la un manager, care cere parola unui cont tehnic. Care este reacția corectă?",
+    "optiuni": [
+      "Trimiți parola deoarece mesajul este urgent.",
+      "Verifici solicitarea printr-un canal separat și raportezi mesajul suspect.",
+      "Redirecționezi mesajul tuturor colegilor."
+    ],
+    "corect": 2
+  },
+  {
+    "id": 4,
+    "intrebare": "De ce trebuie raportat un mesaj de phishing, chiar dacă nu ai accesat linkul?",
+    "optiuni": [
+      "Pentru ca echipa de securitate să poată proteja și alți utilizatori.",
+      "Pentru a primi automat o parolă nouă.",
+      "Pentru a demonstra că adresa de e-mail funcționează."
+    ],
+    "corect": 1
+  },
+  {
+    "id": 5,
+    "intrebare": "Care este scopul principal al instruirii de securitate cibernetică?",
+    "optiuni": [
+      "Eliminarea completă a tuturor riscurilor tehnice.",
+      "Învățarea exclusivă a programării echipamentelor SCADA.",
+      "Dezvoltarea capacității de a identifica riscurile și de a reacționa corect."
+    ],
+    "corect": 3
+  }
+]
