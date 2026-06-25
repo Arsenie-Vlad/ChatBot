@@ -1,6 +1,8 @@
 import streamlit as st
 from src.comenzi import comanda_curs, comanda_test, formateaza_intrebare
 from src.evaluare_raspunsuri import evalueaza_raspuns
+from src import salveaza_rezultat
+from datetime import datetime
 
 st.set_page_config(page_title="GuardOT", page_icon="assets/scut.png")
 
@@ -13,8 +15,8 @@ if "nume_utilizator" not in st.session_state:
 
 if "mesaje" not in st.session_state:
     st.session_state.mesaje = [{
-        "rol": "assistant",
-        "continut": "Salut! Sunt GuardOT, un asistent virtual care te va ghida prin cursurile și testul de securitate. Te rog să introduci numele tău pentru a începe."
+        "role": "assistant",
+        "content": "Salut! Sunt GuardOT, un asistent virtual care te va ghida prin cursurile și testul de securitate. Te rog să introduci numele tău pentru a începe."
     }]
 
 if "test_activ" not in st.session_state:
@@ -29,6 +31,9 @@ if "index_intrebare" not in st.session_state:
 if "scor" not in st.session_state:
     st.session_state.scor = 0
 
+if "rezultat_salvat" not in st.session_state:
+    st.session_state.rezultat_salvat = False
+
 if st.sidebar.button("Resetează conversația"):
     st.session_state.clear()
     st.rerun()
@@ -38,8 +43,8 @@ st.title("GuardOT")
 st.write("Acesta este prototipul interfeței pentru GuardOT.")
 
 for mesaj in st.session_state.mesaje:
-    with st.chat_message(mesaj["rol"]):
-        st.markdown(mesaj["continut"])
+    with st.chat_message(mesaj["role"]):
+        st.markdown(mesaj["content"])
 
 if st.session_state.nume_utilizator is None:
     text_ajutator = "Introdu numele tău aici..."
@@ -56,7 +61,10 @@ if input_utilizator:
     if not input_utilizator:
         st.stop()
 
-    st.session_state.mesaje.append({"rol": "user", "continut": input_utilizator})
+    st.session_state.mesaje.append({"role": "user", "content": input_utilizator})
+
+    with st.chat_message("user"):
+        st.markdown(input_utilizator)
 
     if st.session_state.nume_utilizator is None:
         st.session_state.nume_utilizator = input_utilizator
@@ -90,8 +98,14 @@ if input_utilizator:
                     urmatoarea_intrebare = quiz[st.session_state.index_intrebare]
                     raspuns_bot = f"{mesaj_rezultat}\n\n{formateaza_intrebare(urmatoarea_intrebare, st.session_state.index_intrebare + 1, len(quiz))}"
                 else:
-                    raspuns_bot = f"{mesaj_rezultat}\n\n### Test terminat\n\nScor final: {st.session_state.scor}/{len(quiz)}"
                     st.session_state.test_activ = False
+                    scor_formatat = f"{st.session_state.scor}/{len(quiz)}"
+
+                    if not st.session_state.rezultat_salvat:
+                        salveaza_rezultat(st.session_state.nume_utilizator, scor_formatat, datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+                        st.session_state.rezultat_salvat = True
+
+                    raspuns_bot = f"{mesaj_rezultat}\n\n### Test terminat\n\nScor final: {scor_formatat}\n\nRezultatul a fost salvat."
 
     else:
         comanda = input_utilizator.lower().split()[0]
@@ -100,28 +114,31 @@ if input_utilizator:
             try:
                 raspuns_bot = comanda_curs()
             except FileNotFoundError:
-                raspuns_bot = "Fișierul data/cursuri.json nu a fost găsit."
+                raspuns_bot = "Fișierul `data/cursuri.json` nu a fost găsit."
 
         elif comanda == "/test":
             try:
                 quiz = comanda_test()
 
                 if not quiz:
-                    raspuns_bot = "Fișierul quiz.json nu conține întrebări."
+                    raspuns_bot = "Fișierul `quiz.json` nu conține întrebări."
                 else:
                     st.session_state.quiz = quiz
                     st.session_state.index_intrebare = 0
                     st.session_state.scor = 0
                     st.session_state.test_activ = True
+                    st.session_state.rezultat_salvat = False
                     raspuns_bot = f"Testul a început!\n\n{formateaza_intrebare(quiz[0], 1, len(quiz))}"
 
             except FileNotFoundError:
-                raspuns_bot = "Fișierul data/quiz.json nu a fost găsit."
+                raspuns_bot = "Fișierul `data/quiz.json` nu a fost găsit."
             except ValueError as eroare:
                 raspuns_bot = f"Eroare: {eroare}"
 
         else:
             raspuns_bot = "Comandă necunoscută. Scrie `/curs` sau `/test`."
 
-    st.session_state.mesaje.append({"rol": "assistant", "continut": raspuns_bot})
-    st.rerun()
+    st.session_state.mesaje.append({"role": "assistant", "content": raspuns_bot})
+
+    with st.chat_message("assistant"):
+        st.markdown(raspuns_bot)
