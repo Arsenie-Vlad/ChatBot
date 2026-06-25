@@ -7,7 +7,7 @@ REPORT_FILE = os.path.join(PROJECT_DIRECTORY, "data", "raport.csv")
 
 RAPORT_HEADER = ["nume", "scor", "data"]
 
-def salveaza_rezultat(nume: str, scor: int, data: str) -> None:
+def salveaza_rezultat(nume: str, scor: str, data: str) -> None:
     os.makedirs(os.path.dirname(REPORT_FILE), exist_ok=True)
 
     fisier_exista = os.path.isfile(REPORT_FILE)
