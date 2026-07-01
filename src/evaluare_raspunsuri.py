@@ -1,8 +1,4 @@
-def evalueaza_raspuns(
-    input_utilizator: int,
-    index_corect: int,
-) -> bool:
-
+def evalueaza_raspuns(input_utilizator: int, index_corect: int) -> bool: 
     return input_utilizator == index_corect
 
 

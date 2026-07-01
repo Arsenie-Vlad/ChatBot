@@ -39,25 +39,3 @@ def comanda_test() -> list:
         )
 
     return quiz
-
-def formateaza_intrebare(
-    intrebare: dict,
-    numar_intrebare: int,
-    total_intrebari: int,
-) -> str:
-
-    randuri = [
-        f"### Întrebarea {numar_intrebare}/{total_intrebari}",
-        intrebare["intrebare"],
-    ]
-
-    optiuni = intrebare["optiuni"]
-
-    for index, optiune in enumerate(optiuni):
-        randuri.append(f"**{index}.** {optiune}")
-
-    randuri.append(
-        f"Răspunde cu un număr între 0 și {len(optiuni) - 1}."
-    )
-
-    return "\n\n".join(randuri)
