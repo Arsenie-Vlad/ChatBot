@@ -45,7 +45,6 @@ def proceseaza_comanda(input_utilizator: str) -> str:
     comanda = input_utilizator.lower().split()[0]
 
     if comanda == "/curs":
-        st.session_state["test_finalizat"] = False
 
         try:
             raspuns_bot = comanda_curs()
@@ -65,7 +64,6 @@ def proceseaza_comanda(input_utilizator: str) -> str:
                 st.session_state["scor_final"] = ""
                 st.session_state["feedback_test"] = ""
                 st.session_state["rezultat_salvat"] = False
-                st.session_state["test_finalizat"] = False
                 st.session_state["test_activ"] = True
 
                 raspuns_bot = (

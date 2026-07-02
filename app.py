@@ -10,10 +10,6 @@ from config import ADMIN_EMAIL
 
 st.set_page_config(page_title="GuardOT", page_icon="assets/scut.png")
 
-st.sidebar.title("Meniu GuardOT")
-st.sidebar.info("ajshdb")
-st.sidebar.markdown("**Comenzi disponibile**\n\n- `/curs` — afișează cursurile\n- `/test` — începe testul")
-
 st.session_state.setdefault("nume_utilizator", None)
 st.session_state.setdefault("email", None)
 st.session_state.setdefault("mesaje", [{
@@ -21,7 +17,6 @@ st.session_state.setdefault("mesaje", [{
     "content": "Salut! Sunt GuardOT, un asistent virtual care te va ghida prin cursurile și testul de securitate. Te rog să introduci adresa ta de e-mail pentru a începe."
 }])
 st.session_state.setdefault("test_activ", False)
-st.session_state.setdefault("test_finalizat", False)
 st.session_state.setdefault("quiz", [])
 st.session_state.setdefault("index_intrebare", 0)
 st.session_state.setdefault("scor", 0)
@@ -29,13 +24,58 @@ st.session_state.setdefault("scor_final", "")
 st.session_state.setdefault("feedback_test", "")
 st.session_state.setdefault("rezultat_salvat", False)
 
-if st.session_state["email"] == ADMIN_EMAIL:
-    pagina = st.sidebar.radio(
-        "Navigare",
-        ["Chat", "Analytics"]
-    )
-else:
-    pagina = "Chat"
+with st.sidebar:
+    st.image("assets/scut.png", width=80)
+
+    st.title("GuardOT")
+    st.caption("Asistent pentru instruire în securitate")
+
+    st.divider()
+
+    st.subheader("👤 Utilizator")
+
+    if st.session_state["email"]:
+        st.success(st.session_state["email"])
+    else:
+        st.info("Neautentificat")
+
+    st.divider()
+
+    st.subheader("Comenzi")
+    st.markdown("""
+- `/curs` — Afișează cursurile
+- `/test` — Începe testul
+""")
+
+    if st.session_state["test_activ"]:
+        st.divider()
+        st.subheader("Progres")
+
+        st.metric("Scor", st.session_state["scor"])
+
+        st.progress(
+            st.session_state["index_intrebare"] /
+            len(st.session_state["quiz"])
+        )
+        st.divider()
+
+
+    if st.session_state["email"] == ADMIN_EMAIL:
+        st.divider()
+        pagina = st.radio(
+            "Navigare",
+            ["Chat", "Analytics"]
+        )
+        st.divider()
+    else:
+        pagina = "Chat"
+
+
+    if st.button("Resetează conversația", use_container_width=True):
+        st.session_state.clear()
+        st.rerun()
+
+    st.caption("GuardOT v1.3")
 
 if pagina == "Analytics":
     afiseaza_dashboard()
@@ -64,11 +104,6 @@ def proceseaza_mesaj() -> None:
         "role": "assistant",
         "content": raspuns_bot
     })
-
-
-if st.sidebar.button("Resetează conversația"):
-    st.session_state.clear()
-    st.rerun()
     
 st.image("assets/scut.png", width=100)
 st.title("GuardOT")

@@ -34,14 +34,17 @@ def selecteaza_raspuns(index_optiune: int) -> None:
 
         st.session_state["scor_final"] = scor_final
         st.session_state["test_activ"] = False
-        st.session_state["test_finalizat"] = True
+
+        st.session_state["mesaje"].append({
+            "role": "assistant",
+            "content": (
+                f"**Ai terminat testul!**\n\n"
+                f"**Scor final:** {scor_final}\n\n"
+                "Rezultatul a fost salvat."
+            )
+})
 
 def afiseaza_test_interactiv() -> None:
-    if st.session_state["test_finalizat"]:
-        st.success("Ai terminat testul!")
-        st.write(f"Scor final: **{st.session_state['scor_final']}**")
-        st.write("Rezultatul a fost salvat în `data/raport.csv`.")
-        return
 
     if not st.session_state["test_activ"]:
         return
