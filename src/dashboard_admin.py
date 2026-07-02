@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 import streamlit as st
+from .email_service import trimite_rapoarte
 
 PROJECT_DIRECTORY = Path(__file__).resolve().parent.parent
 REPORT_FILE = PROJECT_DIRECTORY / "data" / "raport.csv"
@@ -20,7 +21,7 @@ def afiseaza_dashboard() -> None:
         st.warning("Fișierul raport.csv este gol.")
         return
     
-    coloane_necesare = {"nume", "scor", "data"}
+    coloane_necesare = {"nume", "email", "scor", "data"}
 
     if not coloane_necesare.issubset(raport.columns):
         st.error("Fișierul raport.csv nu conține coloanele necesare.")
@@ -74,11 +75,12 @@ def afiseaza_dashboard() -> None:
 
     st.subheader("Rezultate individuale")
 
-    tabel = raport[["nume", "scor", "procent", "rezultat", "data"]].copy()
+    tabel = raport[["nume", "email", "scor", "procent", "rezultat", "data"]].copy()
     tabel["procent"] = tabel["procent"].round(1).astype(str) + "%"
 
     tabel.columns = [
         "Nume",
+        "Email",
         "Scor",
         "Procent",
         "Rezultat",
@@ -86,3 +88,14 @@ def afiseaza_dashboard() -> None:
     ]
 
     st.dataframe(tabel, use_container_width=True)
+
+    st.divider()
+
+    st.subheader("Administrare")
+
+    if st.button("Trimite rapoarte pe e-mail", use_container_width=True):
+        try:
+            trimite_rapoarte()
+            st.success("Toate rapoartele au fost trimise.")
+        except Exception as eroare:
+            st.error(f"Eroare: {eroare}")

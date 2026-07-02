@@ -1,8 +1,11 @@
 import streamlit as st
 
-from src.comenzi import comanda_curs, comanda_test
+from src.comenzi import proceseaza_comanda
 from src.interactivitate_test import afiseaza_test_interactiv
 from src.dashboard_admin import afiseaza_dashboard
+from src.autentificare import proceseaza_login
+
+from config import ADMIN_EMAIL
 
 
 st.set_page_config(page_title="GuardOT", page_icon="assets/scut.png")
@@ -11,19 +14,11 @@ st.sidebar.title("Meniu GuardOT")
 st.sidebar.info("ajshdb")
 st.sidebar.markdown("**Comenzi disponibile**\n\n- `/curs` — afișează cursurile\n- `/test` — începe testul")
 
-pagina = st.sidebar.radio(
-    "Navigare",
-    ["Chat", "Analytics"]
-)
-
-if pagina == "Analytics":
-    afiseaza_dashboard()
-    st.stop()
-
 st.session_state.setdefault("nume_utilizator", None)
+st.session_state.setdefault("email", None)
 st.session_state.setdefault("mesaje", [{
     "role": "assistant",
-    "content": "Salut! Sunt GuardOT, un asistent virtual care te va ghida prin cursurile și testul de securitate. Te rog să introduci numele tău pentru a începe."
+    "content": "Salut! Sunt GuardOT, un asistent virtual care te va ghida prin cursurile și testul de securitate. Te rog să introduci adresa ta de e-mail pentru a începe."
 }])
 st.session_state.setdefault("test_activ", False)
 st.session_state.setdefault("test_finalizat", False)
@@ -34,6 +29,17 @@ st.session_state.setdefault("scor_final", "")
 st.session_state.setdefault("feedback_test", "")
 st.session_state.setdefault("rezultat_salvat", False)
 
+if st.session_state["email"] == ADMIN_EMAIL:
+    pagina = st.sidebar.radio(
+        "Navigare",
+        ["Chat", "Analytics"]
+    )
+else:
+    pagina = "Chat"
+
+if pagina == "Analytics":
+    afiseaza_dashboard()
+    st.stop()
 
 def proceseaza_mesaj() -> None:
     if st.session_state["test_activ"]:
@@ -49,44 +55,10 @@ def proceseaza_mesaj() -> None:
         "content": input_utilizator
     })
 
-    if st.session_state["nume_utilizator"] is None:
-        st.session_state["nume_utilizator"] = input_utilizator
-        raspuns_bot = f"Salut, {input_utilizator}! Scrie `/curs` pentru cursuri sau `/test` pentru a începe testul."
+    if st.session_state["email"] is None:
+        raspuns_bot = proceseaza_login(input_utilizator)
     else:
-        comanda = input_utilizator.lower().split()[0]
-
-        if comanda == "/curs":
-            st.session_state["test_finalizat"] = False
-
-            try:
-                raspuns_bot = comanda_curs()
-            except FileNotFoundError:
-                raspuns_bot = "Fișierul `data/cursuri.json` nu a fost găsit."
-
-        elif comanda == "/test":
-            try:
-                quiz = comanda_test()
-
-                if not quiz:
-                    raspuns_bot = "Fișierul `data/quiz.json` nu conține întrebări."
-                else:
-                    st.session_state["quiz"] = quiz
-                    st.session_state["index_intrebare"] = 0
-                    st.session_state["scor"] = 0
-                    st.session_state["scor_final"] = ""
-                    st.session_state["feedback_test"] = ""
-                    st.session_state["rezultat_salvat"] = False
-                    st.session_state["test_finalizat"] = False
-                    st.session_state["test_activ"] = True
-                    raspuns_bot = "Testul a început. Selectează una dintre variantele de mai jos."
-
-            except FileNotFoundError:
-                raspuns_bot = "Fișierul `data/quiz.json` nu a fost găsit."
-            except ValueError as eroare:
-                raspuns_bot = f"Eroare: {eroare}"
-
-        else:
-            raspuns_bot = "Comandă necunoscută. Scrie `/curs` sau `/test`."
+        raspuns_bot = proceseaza_comanda(input_utilizator)
 
     st.session_state["mesaje"].append({
         "role": "assistant",
@@ -106,8 +78,8 @@ for mesaj in st.session_state["mesaje"]:
     with st.chat_message(mesaj["role"]):
         st.markdown(mesaj["content"])
 
-if st.session_state["nume_utilizator"] is None:
-    text_ajutator = "Introdu numele tău aici..."
+if st.session_state["email"] is None:
+    text_ajutator = "Introdu adresa ta de e-mail..."
 elif st.session_state["test_activ"]:
     text_ajutator = "Test în desfășurare..."
 else:

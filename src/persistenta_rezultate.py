@@ -5,9 +5,9 @@ PROJECT_DIRECTORY = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 REPORT_FILE = os.path.join(PROJECT_DIRECTORY, "data", "raport.csv")
 
-RAPORT_HEADER = ["nume", "scor", "data"]
+RAPORT_HEADER = ["nume", "email", "scor", "data"]
 
-def salveaza_rezultat(nume: str, scor: str, data: str) -> None:
+def salveaza_rezultat(nume: str, email: str, scor: str, data: str) -> None:
     os.makedirs(os.path.dirname(REPORT_FILE), exist_ok=True)
 
     fisier_exista = os.path.isfile(REPORT_FILE)
@@ -18,4 +18,4 @@ def salveaza_rezultat(nume: str, scor: str, data: str) -> None:
         if not fisier_exista or os.path.getsize(REPORT_FILE) == 0:
             writer.writerow(RAPORT_HEADER)
         
-        writer.writerow([nume, scor, data])
+        writer.writerow([nume, email, scor, data])

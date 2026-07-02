@@ -1,12 +1,27 @@
-# Environments
+# Virtual environment
 env/
+.venv/
 venv/
-.env
 
 # Python
 __pycache__/
-*.py[cod]
-*$py.class
+*.pyc
 
 # VS Code
 .vscode/
+
+# Config cu parole
+config.py
+
+# Rezultate generate
+data/raport.csv
+
+# Variabile de mediu
+.env
+
+# Streamlit cache
+.streamlit/
+
+# Windows
+Thumbs.db
+Desktop.ini

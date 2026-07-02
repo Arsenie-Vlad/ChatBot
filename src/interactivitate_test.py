@@ -29,7 +29,7 @@ def selecteaza_raspuns(index_optiune: int) -> None:
 
         if not st.session_state["rezultat_salvat"]:
             data = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            salveaza_rezultat(st.session_state["nume_utilizator"], scor_final, data)
+            salveaza_rezultat(st.session_state["nume_utilizator"], st.session_state["email"], scor_final, data)
             st.session_state["rezultat_salvat"] = True
 
         st.session_state["scor_final"] = scor_final
