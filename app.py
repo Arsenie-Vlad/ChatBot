@@ -2,6 +2,7 @@ import streamlit as st
 
 from src.comenzi import comanda_curs, comanda_test
 from src.interactivitate_test import afiseaza_test_interactiv
+from src.dashboard_admin import afiseaza_dashboard
 
 
 st.set_page_config(page_title="GuardOT", page_icon="assets/scut.png")
@@ -9,6 +10,15 @@ st.set_page_config(page_title="GuardOT", page_icon="assets/scut.png")
 st.sidebar.title("Meniu GuardOT")
 st.sidebar.info("ajshdb")
 st.sidebar.markdown("**Comenzi disponibile**\n\n- `/curs` — afișează cursurile\n- `/test` — începe testul")
+
+pagina = st.sidebar.radio(
+    "Navigare",
+    ["Chat", "Analytics"]
+)
+
+if pagina == "Analytics":
+    afiseaza_dashboard()
+    st.stop()
 
 st.session_state.setdefault("nume_utilizator", None)
 st.session_state.setdefault("mesaje", [{
@@ -87,7 +97,7 @@ def proceseaza_mesaj() -> None:
 if st.sidebar.button("Resetează conversația"):
     st.session_state.clear()
     st.rerun()
-
+    
 st.image("assets/scut.png", width=100)
 st.title("GuardOT")
 st.write("Acesta este prototipul interfeței pentru GuardOT.")

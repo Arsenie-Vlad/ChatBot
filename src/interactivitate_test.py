@@ -36,7 +36,6 @@ def selecteaza_raspuns(index_optiune: int) -> None:
         st.session_state["test_activ"] = False
         st.session_state["test_finalizat"] = True
 
-@st.fragment
 def afiseaza_test_interactiv() -> None:
     if st.session_state["test_finalizat"]:
         st.success("Ai terminat testul!")

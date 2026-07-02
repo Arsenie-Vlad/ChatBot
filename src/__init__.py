@@ -3,6 +3,7 @@ from .comenzi import comanda_curs, comanda_test
 from .evaluare_raspunsuri import evalueaza_raspuns
 from .interactivitate_test import afiseaza_test_interactiv
 from .persistenta_rezultate import salveaza_rezultat
+from .dashboard_admin import afiseaza_dashboard
 
 __all__ = [
     "citeste_fisier",
@@ -11,4 +12,5 @@ __all__ = [
     "evalueaza_raspuns",
     "afiseaza_test_interactiv",
     "salveaza_rezultat",
+    "afiseaza_dashboard",
 ]
