@@ -1,5 +1,6 @@
 from pathlib import Path
 import streamlit as st
+import random
 
 from .citire_date import citeste_fisier
 
@@ -8,7 +9,7 @@ PROJECT_DIRECTORY = Path(__file__).resolve().parent.parent
 CURSURI_FILE = PROJECT_DIRECTORY / "data" / "cursuri.json"
 QUIZ_FILE = PROJECT_DIRECTORY / "data" / "quiz.json"
 
-def comanda_curs() -> str:
+'''def comanda_curs() -> str:
 
     cursuri = citeste_fisier(str(CURSURI_FILE))
     randuri_raspuns = []
@@ -28,7 +29,10 @@ def comanda_curs() -> str:
 
         randuri_raspuns.append("---")
 
-    return "\n\n".join(randuri_raspuns)
+    return "\n\n".join(randuri_raspuns)'''
+
+def comanda_curs() -> list:
+    return list(citeste_fisier(str(CURSURI_FILE)).values())
 
 def comanda_test() -> list:
 
@@ -47,7 +51,21 @@ def proceseaza_comanda(input_utilizator: str) -> str:
     if comanda == "/curs":
 
         try:
-            raspuns_bot = comanda_curs()
+            cursuri = comanda_curs()
+
+            random.shuffle(cursuri)
+
+            st.session_state["cursuri"] = cursuri
+            st.session_state["index_curs"] = 0
+            st.session_state["curs_activ"] = True
+            st.session_state["curs_finalizat"] = False
+            st.session_state["test_activ"] = False
+
+            raspuns_bot = (
+                "Cursul a început.\n\n"
+                "Parcurge toate cele 3 module folosind butonul **Next**."
+            )
+            st.session_state["feedback_test"] = ""
         except FileNotFoundError:
             raspuns_bot = "Fișierul `data/cursuri.json` nu a fost găsit."
 
@@ -65,6 +83,8 @@ def proceseaza_comanda(input_utilizator: str) -> str:
                 st.session_state["feedback_test"] = ""
                 st.session_state["rezultat_salvat"] = False
                 st.session_state["test_activ"] = True
+                st.session_state["curs_activ"] = False
+                st.session_state["curs_finalizat"] = False
 
                 raspuns_bot = (
                     "Testul a început. "
