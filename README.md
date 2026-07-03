@@ -226,7 +226,7 @@ GuardOT/
 ## 1. Clonează repository-ul
 
 ```bash
-git clone https://github.com/Arsenie-Vlad/ChatBot.git
+git clone https://github.com/Arsenie-Vlad/ChatBot
 ```
 
 ```bash
